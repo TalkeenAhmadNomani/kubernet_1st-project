@@ -2,23 +2,13 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return '''
-        <html>
-        <body>
-            <form action="/greet" method="POST">
-                Enter your name: <input type="text" name="username">
-                <input type="submit" value="Submit">
-            </form>
-        </body>
-        </html>
-    '''
+@app.route("/", methods=["GET", "POST"])
+def home():
+    message = ""
+    if request.method == "POST":
+        name = request.form.get("name")
+        message = f"Hello {name}, Welcome to the Kubernetes test application!!!"
+    return render_template("index.html", message=message)
 
-@app.route('/greet', methods=['POST'])
-def greet():
-    user_input = request.form['username']
-    return f"Hello {user_input}, Welcome to this app for Docker demonstration. Please consider like and subscribe to the channel."
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
